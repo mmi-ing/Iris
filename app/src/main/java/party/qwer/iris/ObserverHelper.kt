@@ -182,7 +182,9 @@ class ObserverHelper(
     }
 
     private fun getStringJsonToMap(data: String?): MutableMap<String, Any?> {
-        if(data == null) return HashMap()
+        // KakaoTalk 26.4.x stores empty supplement/attachment as "" (not null/"{}").
+        // JSONObject("") throws "End of input at character 0"; treat blank as empty map.
+        if(data.isNullOrBlank()) return HashMap()
         val object_ = JSONObject(data)
         val map: MutableMap<String, Any?> = HashMap()
 
